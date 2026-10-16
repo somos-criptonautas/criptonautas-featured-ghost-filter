@@ -1,0 +1,16 @@
+# Paste this service into the docker-compose.yml that runs n8n, under "services:".
+# Same compose project = same network, so n8n reaches it at http://criptonautas-featured-ghost-filter:8000
+# The image is built and published by this repo's GitHub Actions on every push to main.
+services:
+  criptonautas-featured-ghost-filter:
+    image: ghcr.io/somos-criptonautas/criptonautas-featured-ghost-filter:latest
+    container_name: criptonautas-featured-ghost-filter
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1g
+    cpus: 2
+    pids_limit: 64
+    # no "ports": only containers on the same network can reach it
