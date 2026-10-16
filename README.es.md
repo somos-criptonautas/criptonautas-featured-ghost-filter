@@ -45,6 +45,7 @@ docker compose up -d criptonautas-featured-ghost-filter
 - `POST /filter?seed=<slug-del-post>` con la imagen como cuerpo → PNG.
   - Opcional `&accent=violet|red` y `&stroke=thin|thick` fuerzan la variante.
   - Cabecera `X-Variant`: la variante usada (`accent`, `stroke`, `cell`, `grain`).
+  - Opcional `&mode=chart` para gráficos y capturas: solo la paleta, sin trama ni líneas de tinta; los fondos oscuros pasan a papel. `X-Variant` es entonces `{"mode": "chart"}`.
   - `Content-Disposition` lleva `<slug>.png`, para que Ghost acepte la subida.
   - Entrada de hasta 20 MB; salida de 1600 px de ancho como máximo.
   - Misma semilla, misma imagen: reprocesar un post no cambia su resultado.

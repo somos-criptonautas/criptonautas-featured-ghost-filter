@@ -1,6 +1,6 @@
 """HTTP service for the internal Docker network. n8n calls it; it is never published to the internet.
 
-POST /filter?seed=<slug>[&accent=violet|red][&stroke=thin|thick]   body = image bytes
+POST /filter?seed=<slug>[&accent=violet|red][&stroke=thin|thick][&mode=chart]   body = image bytes
   -> 200 image/png (exact palette, no metadata), X-Variant header with the chosen variant
 GET  /health -> 200 ok
 """
@@ -17,7 +17,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from brand_filter import apply_brand_filter
+from brand_filter import apply_brand_filter, apply_chart_filter
 from line_art import line_map
 
 MAX_BODY_BYTES = 20 * 1024 * 1024
@@ -60,6 +60,8 @@ def process(image_bytes, seed, query):
     rgb = crop_to_multiple_of_8(rgb)
     if min(rgb.shape[:2]) < 8:
         raise ValueError("image is smaller than 8 px")
+    if query.get("mode", [None])[0] == "chart":
+        return to_png(apply_chart_filter(rgb)), {"mode": "chart"}
     variant = choose_variant(seed, query)
 
     scale = min(1, LINE_MODEL_MAX_SIDE / max(rgb.shape[:2]))
@@ -72,9 +74,13 @@ def process(image_bytes, seed, query):
     seed_int = int.from_bytes(hashlib.sha256(seed.encode()).digest()[:4], "big")
     out = apply_brand_filter(rgb, variant["accent"], cell=variant["cell"], seed=seed_int,
                              lines=strokes, grain=variant["grain"])
+    return to_png(out), variant
+
+
+def to_png(rgb):
     buffer = io.BytesIO()
-    Image.fromarray(out).save(buffer, format="PNG", optimize=True)  # PIL writes no EXIF or text chunks here
-    return buffer.getvalue(), variant
+    Image.fromarray(rgb).save(buffer, format="PNG", optimize=True)  # PIL writes no EXIF or text chunks here
+    return buffer.getvalue()
 
 
 class Handler(BaseHTTPRequestHandler):

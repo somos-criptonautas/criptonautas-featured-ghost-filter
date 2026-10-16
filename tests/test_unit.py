@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 
 import server
-from brand_filter import PALETTE, apply_brand_filter
+from brand_filter import INK, PALETTE, PAPER, apply_brand_filter, apply_chart_filter
 
 
 class FakeNet:
@@ -34,6 +34,22 @@ class BrandFilterTest(unittest.TestCase):
         for accent in ("violet", "red"):
             out = apply_brand_filter(rgb, accent)
             self.assertLessEqual({tuple(c) for c in out.reshape(-1, 3)}, PALETTE)
+
+
+class ChartFilterTest(unittest.TestCase):
+    def test_dark_chart_becomes_paper_with_ink_text(self):
+        rgb = np.full((100, 200, 3), 20, np.uint8)  # dark background
+        rgb[40:60, 20:180] = 230  # light "text" bar
+        out = apply_chart_filter(rgb)
+        self.assertLessEqual({tuple(c) for c in out.reshape(-1, 3)}, PALETTE)
+        self.assertEqual(tuple(out[0, 0]), PAPER)
+        self.assertEqual(tuple(out[50, 100]), INK)
+
+    def test_chart_mode_skips_line_model(self):
+        server.nets.clear()  # would raise KeyError if the line model were used
+        png, variant = server.process(sample_image(), "a-post", {"mode": ["chart"]})
+        self.assertEqual(variant, {"mode": "chart"})
+        self.assertEqual(Image.open(io.BytesIO(png)).format, "PNG")
 
 
 class VariantTest(unittest.TestCase):

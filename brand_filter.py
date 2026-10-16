@@ -40,3 +40,23 @@ def apply_brand_filter(rgb, accent, cell=9, seed=7, lines=None, grain=0.025):
     is_paper = np.all(out == PAPER, axis=-1)
     out[is_paper & (rng.random((h, w)) < grain)] = GREY
     return out
+
+
+def apply_chart_filter(rgb):
+    """Charts and screenshots: no halftone or line model, so text and thin lines stay readable.
+    Dark backgrounds are flipped to paper; grey tones map to PAPER/GREY/INK, colors to the two accents."""
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
+    hue, value = hsv[..., 0].astype(np.int16), hsv[..., 2].astype(np.float32) / 255.0
+    chroma = rgb.max(axis=-1).astype(np.int16) - rgb.min(axis=-1)  # unlike HSV saturation, stays low on near-black
+    border = np.concatenate([value[0], value[-1], value[:, 0], value[:, -1]])
+    if np.median(border) < 0.5:  # dark theme: flip so the background becomes paper
+        value = 1.0 - value
+    colored = chroma > 45
+    warm = (hue < 25) | (hue > 160)  # OpenCV hue is 0..179: reds, oranges and yellows
+    out = np.empty(rgb.shape, np.uint8)
+    out[:] = PAPER
+    out[value < 0.80] = GREY
+    out[value < 0.45] = INK
+    out[colored & warm] = RED
+    out[colored & ~warm] = VIOLET
+    return out
