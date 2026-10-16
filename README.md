@@ -10,11 +10,11 @@ It is a small internal HTTP service. n8n calls it; it is never exposed to the in
 
 ## How it fits
 
-1. A post tagged with the internal tag `#ilustracion` is published (or picked up by a manual backfill).
-2. The n8n workflow `ghost-featured-image-send` downloads its featured image, sends it to this service, uploads the result to Ghost and logs it in the `featured_image_variants` data table. The post is not changed.
-3. You open `new_url` in the table, tick `approved` on the ones you like, and run `ghost-featured-images-apply`, which swaps the featured image. `original_url` stays in the table to revert.
+1. A post is published with the internal tag `#cover-filter` (photos and illustrations) or `#graph-filter` (charts and screenshots, sent with `mode=chart`).
+2. The n8n workflow `ghost-featured-image-send` downloads its featured image, sends it to this service, uploads the result to Ghost, swaps the featured image and logs it in the `featured_image_variants` data table. `original_url` stays in the table to revert.
+3. A manual backfill over already published posts runs in draft mode: it only uploads and logs, so each image is reviewed before it is applied.
 
-Only illustrations get the tag. Never screenshots, charts, faces or third-party material.
+Faces and third-party material never get either tag.
 
 ## Install
 

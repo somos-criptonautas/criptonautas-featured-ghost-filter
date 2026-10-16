@@ -10,11 +10,11 @@ Es un servicio HTTP interno. Lo llama n8n; nunca queda expuesto a internet.
 
 ## Cómo encaja
 
-1. Se publica un post con la etiqueta interna `#ilustracion` (o lo toma una pasada manual sobre lo ya publicado).
-2. El workflow de n8n `ghost-featured-image-send` descarga la imagen destacada, la manda a este servicio, sube el resultado a Ghost y lo anota en la tabla `featured_image_variants`. El post no cambia.
-3. En la tabla abres `new_url`, marcas `approved` en las que convencen y ejecutas `ghost-featured-images-apply`, que cambia la imagen destacada. `original_url` queda en la tabla para revertir.
+1. Se publica un post con la etiqueta interna `#cover-filter` (fotos e ilustraciones) o `#graph-filter` (gráficos y capturas, que se envían con `mode=chart`).
+2. El workflow de n8n `ghost-featured-image-send` descarga la imagen destacada, la manda a este servicio, sube el resultado a Ghost, cambia la imagen destacada y lo anota en la tabla `featured_image_variants`. `original_url` queda en la tabla para revertir.
+3. La pasada manual sobre lo ya publicado corre en modo borrador: solo sube y anota, para revisar cada imagen antes de aplicarla.
 
-Solo se etiquetan ilustraciones. Nunca capturas, gráficos, rostros ni material de terceros.
+Los rostros y el material de terceros no llevan ninguna de las dos etiquetas.
 
 ## Instalar
 

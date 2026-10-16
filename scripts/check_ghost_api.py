@@ -3,7 +3,7 @@
   GHOST_URL=http://localhost:2368 GHOST_ADMIN_KEY=id:secret SERVICE_URL=http://127.0.0.1:8000 \
   python3 scripts/check_ghost_api.py photo.jpg
 
-Filters the photo, uploads it, creates a draft tagged #ilustracion, swaps its featured image
+Filters the photo, uploads it, creates a draft tagged #cover-filter, swaps its featured image
 (with and without updated_at, to see whether Ghost requires it) and deletes the draft.
 """
 import base64
@@ -59,7 +59,7 @@ assert code == 201, (code, result)
 image_url = result["images"][0]["url"]
 print("2. upload ok", image_url)
 
-draft = {"posts": [{"title": "Brand filter check", "status": "draft", "tags": [{"name": "#ilustracion"}]}]}
+draft = {"posts": [{"title": "Brand filter check", "status": "draft", "tags": [{"name": "#cover-filter"}]}]}
 code, result = ghost("POST", "/posts/", json.dumps(draft).encode())
 assert code == 201, (code, result)
 post_id = result["posts"][0]["id"]
