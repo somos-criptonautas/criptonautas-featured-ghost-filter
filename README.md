@@ -71,4 +71,4 @@ GitHub Actions runs the unit tests, builds the image, checks the running contain
 
 Line art: [Informative Drawings](https://github.com/carolineec/informative-drawings) by Caroline Chan, Frédo Durand and Phillip Isola (MIT). Weights from [lllyasviel/Annotators](https://huggingface.co/lllyasviel/Annotators).
 
-Code: [MIT](LICENSE). README text: CC BY-NC-SA 4.0.
+Code: [MIT](LICENSE). README text: [CC BY-NC-SA 4.0](CC-BY-NC-SA-4.0.txt).

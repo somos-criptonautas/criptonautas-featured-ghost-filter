@@ -71,4 +71,4 @@ GitHub Actions corre los tests, construye la imagen, prueba el contenedor con lo
 
 Líneas: [Informative Drawings](https://github.com/carolineec/informative-drawings) de Caroline Chan, Frédo Durand y Phillip Isola (MIT). Pesos de [lllyasviel/Annotators](https://huggingface.co/lllyasviel/Annotators).
 
-Código: [MIT](LICENSE). Texto de los README: CC BY-NC-SA 4.0.
+Código: [MIT](LICENSE). Texto de los README: [CC BY-NC-SA 4.0](CC-BY-NC-SA-4.0.txt).
