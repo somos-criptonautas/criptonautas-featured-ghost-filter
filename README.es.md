@@ -1,8 +1,8 @@
+# criptonautas-featured-ghost-filter
+
 [ENGLISH](README.md) | **ESPAÑOL**
 
 Mantenido por Criptonautas. Sin afiliación ni respaldo de la Ghost Foundation.
-
-# criptonautas-featured-ghost-filter
 
 Convierte la imagen destacada de un post de Ghost al estilo de Criptonautas: paleta exacta de 5 colores, trama a 45°, líneas de tinta y grano de papel. Devuelve un PNG sin metadatos.
 
